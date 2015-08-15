@@ -1,0 +1,56 @@
+<html>
+<head>
+    <title></title>
+    <meta content="">
+    <style></style>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script>
+        window.setInterval(function () {
+            // get warning
+            $.ajax({
+                url: "/feed/warn",
+                success: function (data) {
+                    $("#warning").text(data);
+                }
+            });
+
+            $.ajax({
+                url: "/feed/0",
+                success: function (data) {
+                    $("#current").attr("src", "data:image/png;base64," + data);
+                }
+            });
+        }, 1000);
+
+        // get feed
+        window.setInterval(function () {
+            $("#images").empty();
+
+            for (var i = 1; i < 10; i++) {
+                $.ajax({
+                    url: "/feed/" + i,
+                    success: function (data) {
+                        $("#images").append('<img src="data:image/png;base64,' + data + '" />');
+                    }
+                });
+            }
+        }, 5000);
+    </script>
+</head>
+
+<body style="color: #929292; background: #000000">
+<img id="current">
+
+<h2 style="color: #dd1111; background: #c78700" id="warning"></h2>
+
+<p>history(2 second intervals):</p>
+
+<div id=images></div>
+
+
+<p>
+    A warning will show then an image differs greatly from the last. The warning will stay for 30 seconds.
+</p>
+</body>
+</html>
